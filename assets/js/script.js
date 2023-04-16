@@ -5,9 +5,14 @@ var currentDayFormat = today.format('M/D/YYYY');
 
 var cityInputBox = document.getElementById("city-finder");
 var cityButton = document.getElementById("search-btn");
+var currentNameDayIcon = document.getElementById('city-current');
+
+
+
 
 
 //  add error if cannot find city!?
+
 cityButton.addEventListener('click', function(event){
     event.preventDefault();
     var city = cityInputBox.value;
@@ -16,12 +21,13 @@ cityButton.addEventListener('click', function(event){
         return response.json();
     })
     .then(function(data){
-        cityLat = data[0].lat;  //city lattitude
-        cityLong = data[0].lon;     //city longitute
+        var cityLat = data[0].lat;  //city lattitude
+        var cityLong = data[0].lon;     //city longitute
 
         cityCurrent(cityLat, cityLong); //call cityCurrent function to get current forecast
         cityFiveDay(cityLat, cityLong); //call cityFiveDay function to get 5 day forecast
     })
+    return;
    
 })
 
@@ -32,11 +38,27 @@ function cityCurrent(lat, long) { //Fetch current weather data
         return response.json();
     })
     .then(function (data) {
-        console.log(data.main.temp); //temp
-        // console.log(data.main.humidity); //humidity
+
+        var weatherIcon = data.weather[0].icon;
+        currentNameDayIcon.textContent = data.name + " (" + currentDayFormat + ")  ";
+    
+        document.getElementById('icon').src="https://openweathermap.org/img/wn/" + weatherIcon+ ".png";  
+        
+        var temp = "Temp: " + data.main.temp + " &degF";
+        var wind = " Wind: " + data.wind.speed + " MPH";
+        var humidity = "Humidity: " + data.main.humidity + " %";
+
+        document.getElementById('weather-current').innerHTML = temp + "<br>" + wind + "<br>"+ humidity;
+        // console.log(weatherCurrent);
+       
+        
+        // console.log(); //temp
+        // console.log(); //humidity
         // console.log(data.weather[0].icon); //weather icon
-        // console.log(data.wind.speed); //wind speed
-        console.log(data.name); //city name
+        // console.log(); //wind speed
+        // console.log(data.name); //city name
+
+
 
     })
 }

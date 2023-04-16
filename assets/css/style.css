@@ -2,9 +2,13 @@ h1 {
     text-align: center;
     border-style: solid;
     color: white;
-    font-size: 26px;
+    /* font-size: 26px; */
     padding: 10px;
     background: linear-gradient(to right, #0066b2,#002D62);
+}
+
+h2 {
+    display: inline-block;
 }
 
 .form-label {
@@ -12,6 +16,17 @@ h1 {
     font-weight: bold;
 }
 
-#search-btn {
-width: 100%;
+.current-container {
+    border-style: solid;
 }
+
+#search-btn {
+    width: 100%;
+}
+
+#city-current {
+    display: inline-block;
+    vertical-align: middle;
+
+}
+
