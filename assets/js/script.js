@@ -5,6 +5,8 @@ var city = "Atlanta";
 var cityLat = "";
 var cityLong = "";
 
+var today = dayjs();
+console.log(today.format('M/D/YYYY'));
 
 fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&appid=" + APIKey) //Fetch city coordinates based on city entered
 .then(function(response){
@@ -28,11 +30,11 @@ function cityCurrent(lat, long) { //Fetch current weather data
         return response.json();
     })
     .then(function (data) {
-        console.log(data.main.temp); //object returned
-        console.log(data.main.humidity); 
-        console.log(data.weather[0].icon); 
-        console.log(data.wind.speed); 
-        console.log(data.name); 
+        console.log(data.main.temp); //temp
+        console.log(data.main.humidity); //humidity
+        console.log(data.weather[0].icon); //weather icon
+        console.log(data.wind.speed); //wind speed
+        console.log(data.name); //city name
 
     })
 }
