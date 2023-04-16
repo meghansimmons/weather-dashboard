@@ -1,3 +1,17 @@
-p {
-    font-size: 90px;
+h1 {
+    text-align: center;
+    border-style: solid;
+    color: white;
+    font-size: 26px;
+    padding: 10px;
+    background: linear-gradient(to right, #0066b2,#002D62);
+}
+
+.form-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#search-btn {
+width: 100%;
 }
