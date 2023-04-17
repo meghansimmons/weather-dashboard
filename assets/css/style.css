@@ -2,13 +2,19 @@ h1 {
     text-align: center;
     border-style: solid;
     color: white;
-    /* font-size: 26px; */
-    padding: 10px;
+    font-size: 30px;
+    padding: 10px 0px;
     background: linear-gradient(to right, #0066b2,#002D62);
+    width: 100%;
 }
 
 h2 {
     display: inline-block;
+    font-size: 26px;
+}
+
+h3 {
+    font-size: 18px;
 }
 
 .form-label {
@@ -16,7 +22,8 @@ h2 {
     font-weight: bold;
 }
 
-.current-container {
+.current-container,
+.forecast-container {
     border-style: solid;
 }
 
@@ -28,5 +35,17 @@ h2 {
     display: inline-block;
     vertical-align: middle;
 
+}
+#card-1,
+#card-2,
+#card-3,
+#card-4,
+#card-5 {
+    display: inline-block;
+    text-align: left;
+    border-style: solid;
+    background-color: #002D62;
+    color: white;
+    padding: 10px;
 }
 

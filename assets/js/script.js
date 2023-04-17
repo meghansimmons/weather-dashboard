@@ -7,6 +7,11 @@ var cityInputBox = document.getElementById("city-finder");
 var cityButton = document.getElementById("search-btn");
 var currentNameDayIcon = document.getElementById('city-current');
 
+var day1card =document.getElementById('card-1');
+var day2card =document.getElementById('card-2');
+var day3card =document.getElementById('card-3');
+var day4card =document.getElementById('card-4');
+var day5card =document.getElementById('card-5');
 
 
 
@@ -49,17 +54,6 @@ function cityCurrent(lat, long) { //Fetch current weather data
         var humidity = "Humidity: " + data.main.humidity + " %";
 
         document.getElementById('weather-current').innerHTML = temp + "<br>" + wind + "<br>"+ humidity;
-        // console.log(weatherCurrent);
-       
-        
-        // console.log(); //temp
-        // console.log(); //humidity
-        // console.log(data.weather[0].icon); //weather icon
-        // console.log(); //wind speed
-        // console.log(data.name); //city name
-
-
-
     })
 }
 
@@ -69,6 +63,24 @@ function cityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon t
         return response.json();
     })
     .then(function (data) {
+
+        var timestamp = data.list[0].dt_txt;
+        var timestampArray = timestamp.split(" ");
+        var dateOnly = timestampArray[0];
+        var timeOnly = timestampArray[1];
+
+
+        var weatherIcon = data.list[0].weather[0].icon;
+        var temp = data.list[0].main.temp;
+        var wind = data.list[0].wind.speed;
+        var humidity = data.list[0].main.humidity;
+
+
+        day1card.children[0].textContent = dayjs(dateOnly).format('M/D/YYYY');
+        day1card.children[1].src = "https://openweathermap.org/img/wn/" + weatherIcon+ ".png";
+        day1card.children[2].innerHTML = "Temp: " + temp + " &degF<br><br>Wind: " + wind + " MPH<br><br>Humidity: " + humidity + "%";
+        
+
         // for (let index = 0; index < array.length; index++) {
         //     const element = array[index];
 
@@ -82,7 +94,7 @@ function cityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon t
         
         // console.log(data.list);     // all forecast time points
         // console.log(data.list[0]);      // first forecast time points
-        console.log(data.list[0].dt_txt);       // date and time
+        // console.log(data.list[0].dt_txt);       // date and time
         // console.log(data.list[0].main.humidity);        // humidity
         // console.log(data.list[0].main.temp);        // temp
         // console.log(data.list[0].weather[0].icon);      // weather icon
