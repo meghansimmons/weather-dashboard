@@ -63,26 +63,26 @@ function cityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon t
         return response.json();
     })
     .then(function (data) {
+        for (var i=0; i < 5; i++) {
+            var timestamp = data.list[i].dt_txt;
+            var timestampArray = timestamp.split(" ");
+            var dateOnly = timestampArray[0];
+            var timeOnly = timestampArray[1];
+            
+            var weatherIcon = data.list[i].weather[0].icon;
+            var temp = data.list[i].main.temp;
+            var wind = data.list[i].wind.speed;
+            var humidity = data.list[i].main.humidity;
 
-        var timestamp = data.list[0].dt_txt;
-        var timestampArray = timestamp.split(" ");
-        var dateOnly = timestampArray[0];
-        var timeOnly = timestampArray[1];
+            var cardArray = [day1card, day2card, day3card, day4card, day5card]
 
+            cardArray[i].children[0].textContent = dayjs(dateOnly).format('M/D/YYYY');
+            cardArray[i].children[1].src = "https://openweathermap.org/img/wn/" + weatherIcon+ ".png";
+            cardArray[i].children[2].innerHTML = "Temp: " + temp + " &degF<br><br>Wind: " + wind + " MPH<br><br>Humidity: " + humidity + "%";
 
-        var weatherIcon = data.list[0].weather[0].icon;
-        var temp = data.list[0].main.temp;
-        var wind = data.list[0].wind.speed;
-        var humidity = data.list[0].main.humidity;
-
-
-        day1card.children[0].textContent = dayjs(dateOnly).format('M/D/YYYY');
-        day1card.children[1].src = "https://openweathermap.org/img/wn/" + weatherIcon+ ".png";
-        day1card.children[2].innerHTML = "Temp: " + temp + " &degF<br><br>Wind: " + wind + " MPH<br><br>Humidity: " + humidity + "%";
-        
-
-        // for (let index = 0; index < array.length; index++) {
-        //     const element = array[index];
+            console.log(timeOnly);
+            
+            
 
         //     if (condition) {
             
@@ -90,7 +90,7 @@ function cityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon t
                 
         //     }
             
-        // }
+        }
         
         // console.log(data.list);     // all forecast time points
         // console.log(data.list[0]);      // first forecast time points
