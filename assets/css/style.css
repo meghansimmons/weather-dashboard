@@ -28,6 +28,15 @@ h3 {
     border-style: solid;
 }
 
+.search-results { 
+border-top: 2px solid gainsboro;
+
+}
+
+.btn-secondary {
+    width: 100%;
+}
+
 #search-btn {
     width: 100%;
 }

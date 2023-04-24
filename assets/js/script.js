@@ -6,6 +6,7 @@ var currentDayFormat = today.format('M/D/YYYY');
 var cityInputBox = document.getElementById("city-finder");
 var cityButton = document.getElementById("search-btn");
 var currentNameDayIcon = document.getElementById('city-current');
+var searchHistoryEl = document.getElementById('search-history');
 
 var day1card =document.getElementById('card-1');
 var day2card =document.getElementById('card-2');
@@ -13,12 +14,11 @@ var day3card =document.getElementById('card-3');
 var day4card =document.getElementById('card-4');
 var day5card =document.getElementById('card-5');
 
+var searchHistoryButtons = document.getElementsByClassName("btn-secondary");
+// console.log(searchHistoryButtons);
 
 
-
-//  add error if cannot find city!?
-
-cityButton.addEventListener('click', function(event){
+cityButton.addEventListener('click', function(event){ //  add error if cannot find city!?
     event.preventDefault();
     var city = cityInputBox.value;
     fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&appid=" + APIKey) //Fetch city coordinates based on city entered
@@ -29,15 +29,42 @@ cityButton.addEventListener('click', function(event){
         var cityLat = data[0].lat;  //city lattitude
         var cityLong = data[0].lon;     //city longitute
 
-        cityCurrent(cityLat, cityLong); //call cityCurrent function to get current forecast
-        cityFiveDay(cityLat, cityLong); //call cityFiveDay function to get 5 day forecast
+        getCityCurrent(cityLat, cityLong); //call getCityCurrent function to get current forecast
+        getCityFiveDay(cityLat, cityLong); //call getCityFiveDay function to get 5 day forecast
+        createCityHistory(city);
     })
     return;
-   
+  
 })
 
 
-function cityCurrent(lat, long) { //Fetch current weather data
+
+function createCityHistory(city){
+
+    // console.log(city);
+
+    var cityHistoryList = document.createElement("BUTTON");
+    cityHistoryList.classList.add("btn");
+    cityHistoryList.classList.add("btn-secondary");
+    cityHistoryList.textContent = city;
+    
+    // var cityHistoryList = document.createElement("li");
+   
+    searchHistoryEl.appendChild(cityHistoryList);
+
+    // console.log(cityHistoryList);
+
+//     localStorage.setItem("city-finder", JSON.stringify(city));
+
+}
+
+// searchHistoryButtons.addEventListener('click', function(event){
+//     event.preventDefault();
+//     console.log("a button was clicked");
+// })
+
+
+function getCityCurrent(lat, long) { //Fetch current weather data
     fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + APIKey + "&units=imperial")
     .then(function(response){
         return response.json();
@@ -57,7 +84,7 @@ function cityCurrent(lat, long) { //Fetch current weather data
     })
 }
 
-function cityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon timestamp
+function getCityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon timestamp
     fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&appid=" + APIKey  +"&units=imperial")
     .then(function(response){
         return response.json();
@@ -74,7 +101,7 @@ function cityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon t
             var wind = data.list[i].wind.speed;
             var humidity = data.list[i].main.humidity;
             
-            if (timeOnly==18) { //If timestamp is equal to 15 (3pm) then record that info for the 5 day forecast
+            if (timeOnly==15) { //If timestamp is equal to 15 (3pm) then record that info for the 5 day forecast
                 
                 var cardArray = [day1card, day2card, day3card, day4card, day5card]
 
@@ -89,3 +116,18 @@ function cityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon t
     })
 }
 
+function renderLastEvent(){
+    var lastCity = JSON.parse(localStorage.getItem("city-finder"));
+    if(lastCity !== null){
+      cityInputBox.value = lastCity;
+    } else {
+      return;
+    }
+}
+
+      
+function initial(){  //function initial() populates the time-blocks with the last saved data from local storage
+    renderLastEvent();
+}
+
+initial(); //calls function initial() upon browser page load and/or browser refresh
