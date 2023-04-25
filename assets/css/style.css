@@ -1,3 +1,4 @@
+/* Element Selectors */
 h1 {
     text-align: center;
     border-style: solid;
@@ -18,6 +19,7 @@ h3 {
     font-size: 18px;
 }
 
+/* Class Selectors */
 .form-label {
     font-size: 20px;
     font-weight: bold;
@@ -43,6 +45,7 @@ border-top: 2px solid gainsboro;
     
 }
 
+/* Id Selectors */
 #search-btn {
     width: 100%;
 }

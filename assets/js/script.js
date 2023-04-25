@@ -3,9 +3,9 @@ var APIKey = "b640be0d343daf02b19e601754b23be5";
 var today = dayjs();
 var currentDayFormat = today.format('M/D/YYYY');
 
-var cityInputBox = document.getElementById("city-finder");
-var cityButton = document.getElementById("search-btn");
-var currentNameDayIcon = document.getElementById('city-current');
+var cityInputBoxEl = document.getElementById("city-finder");
+var cityButtonEl = document.getElementById("search-btn");
+var currentNameDayIconEl = document.getElementById('city-current');
 var searchHistoryEl = document.getElementById('search-history');
 
 var day1card =document.getElementById('card-1');
@@ -15,12 +15,11 @@ var day4card =document.getElementById('card-4');
 var day5card =document.getElementById('card-5');
 
 
-
-
-cityButton.addEventListener('click', function(event){ //  add error if cannot find city!?
+//listen for a mouse click on the search button and fetch the city coordinates based on city entered
+cityButtonEl.addEventListener('click', function(event){ 
     event.preventDefault();
-    var city = cityInputBox.value;
-    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&appid=" + APIKey) //Fetch city coordinates based on city entered
+    var city = cityInputBoxEl.value;
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&appid=" + APIKey) 
         .then(function(response){
         return response.json();
     })
@@ -30,60 +29,20 @@ cityButton.addEventListener('click', function(event){ //  add error if cannot fi
 
         getCityCurrent(cityLat, cityLong); //call getCityCurrent function to get current forecast
         getCityFiveDay(cityLat, cityLong); //call getCityFiveDay function to get 5 day forecast
-        createCityHistory(city);
+        createCityHistoryBtns(city);
     })
     return;
   
 })
 
-
-function searchHistorycityBtn(data){
-
-    var city = data;
-    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&appid=" + APIKey) //Fetch city coordinates based on city entered
-        .then(function(response){
-        return response.json();
-    })
-    .then(function(data){
-        var cityLat = data[0].lat;  //city lattitude
-        var cityLong = data[0].lon;     //city longitute
-      
-        getCityCurrent(cityLat, cityLong); //call getCityCurrent function to get current forecast
-        getCityFiveDay(cityLat, cityLong); //call getCityFiveDay function to get 5 day forecast
-    
-    })
-
-}
-
-
-
+// listen for a mouse click on a search history button and run the function with the id of the button clicked (the id equals the city name)
 searchHistoryEl.addEventListener('click', function(event){
     event.preventDefault();
-    // console.log("a button was clicked");
-    // console.log(event.target.id);
-    searchHistorycityBtn(event.target.id);
+    getCityHistory(event.target.id);
 })
 
-function createCityHistory(city){
-   
-    var cityHistoryList = document.createElement("BUTTON");
-    cityHistoryList.classList.add("btn");
-    cityHistoryList.classList.add("btn-secondary");
-    cityHistoryList.setAttribute('id', city);
-    cityHistoryList.textContent = city;
-
-    var searchHistoryButtons = document.getElementsByClassName("btn-secondary");
-    // console.log(searchHistoryButtons);
-    
-    // var cityHistoryList = document.createElement("li");
-   
-    searchHistoryEl.appendChild(cityHistoryList);
-    // console.log(cityHistoryList);
-
-    localStorage.setItem("city-finder", JSON.stringify(city));
-}
-
-function getCityCurrent(lat, long) { //Fetch current weather data
+//function getCityCurrent() fetches current weather data
+function getCityCurrent(lat, long) { 
     fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + APIKey + "&units=imperial")
     .then(function(response){
         return response.json();
@@ -91,7 +50,7 @@ function getCityCurrent(lat, long) { //Fetch current weather data
     .then(function (data) {
 
         var weatherIcon = data.weather[0].icon;
-        currentNameDayIcon.textContent = data.name + " (" + currentDayFormat + ")  ";
+        currentNameDayIconEl.textContent = data.name + " (" + currentDayFormat + ")  ";
     
         document.getElementById('icon').src="https://openweathermap.org/img/wn/" + weatherIcon+ ".png";  
         
@@ -104,7 +63,8 @@ function getCityCurrent(lat, long) { //Fetch current weather data
     return;
 }
 
-function getCityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon timestamp
+//function getCityFiveDay() fetches 5 day forecast weather data at the 3pm timestamp
+function getCityFiveDay (lat, long) { 
     fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + lat + "&lon=" + long + "&appid=" + APIKey  +"&units=imperial")
     .then(function(response){
         return response.json();
@@ -121,7 +81,7 @@ function getCityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noo
             var wind = data.list[i].wind.speed;
             var humidity = data.list[i].main.humidity;
             
-            if (timeOnly==15) { //If timestamp is equal to 15 (3pm) then record that info for the 5 day forecast
+            if (timeOnly==15) { //If timestamp is equal to 15 (3pm) then record that particular timestamp info for the 5 day forecast
                 
                 var cardArray = [day1card, day2card, day3card, day4card, day5card]
 
@@ -137,19 +97,51 @@ function getCityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noo
     return;
 }
 
-function renderLastEvent(){
+// function createCityHistoryBtns() creates a new search history button for each city searched in the input box
+function createCityHistoryBtns(city){
+   
+    var cityHistoryList = document.createElement("BUTTON");
+
+    cityHistoryList.classList.add("btn", "btn-secondary");
+    cityHistoryList.setAttribute('id', city);
+    cityHistoryList.textContent = city;
+   
+    searchHistoryEl.appendChild(cityHistoryList);
+
+    localStorage.setItem("city-finder", JSON.stringify(city));
+}
+
+//function getCityHistory() fetches city coordinates based on the city button clicked in the search history
+function getCityHistory(data){
+    var city = data;
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&appid=" + APIKey) 
+        .then(function(response){
+        return response.json();
+    })
+    .then(function(data){
+        var cityLat = data[0].lat;  //city lattitude
+        var cityLong = data[0].lon;     //city longitute
+      
+        getCityCurrent(cityLat, cityLong); //call getCityCurrent function to get current forecast
+        getCityFiveDay(cityLat, cityLong); //call getCityFiveDay function to get 5 day forecast
+    })
+}
+
+// function renderLastCity() gets the last city name from local storage and writes it to the search input box
+function renderLastCity(){
     var lastCity = JSON.parse(localStorage.getItem("city-finder"));
     if(lastCity !== null){
-      cityInputBox.value = lastCity;
+      cityInputBoxEl.value = lastCity;
     } else {
       return;
     }
 }
 
-      
-function initial(){  //function initial() populates the time-blocks with the last saved data from local storage
-    renderLastEvent();
+ //function initial() calls the renderLastCity()
+function initial(){ 
+    renderLastCity();
 }
 
-initial(); //calls function initial() upon browser page load and/or browser refresh
+//calls function initial() upon browser page load and/or browser refresh
+initial(); 
 
