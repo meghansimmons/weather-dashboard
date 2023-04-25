@@ -35,6 +35,12 @@ border-top: 2px solid gainsboro;
 
 .btn-secondary {
     width: 100%;
+    display: inline-block;
+    margin-bottom: 10px;
+    background-color: lightgray;
+    color: black;
+    
+    
 }
 
 #search-btn {

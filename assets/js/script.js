@@ -14,8 +14,7 @@ var day3card =document.getElementById('card-3');
 var day4card =document.getElementById('card-4');
 var day5card =document.getElementById('card-5');
 
-var searchHistoryButtons = document.getElementsByClassName("btn-secondary");
-// console.log(searchHistoryButtons);
+
 
 
 cityButton.addEventListener('click', function(event){ //  add error if cannot find city!?
@@ -38,31 +37,51 @@ cityButton.addEventListener('click', function(event){ //  add error if cannot fi
 })
 
 
+function searchHistorycityBtn(data){
+
+    var city = data;
+    fetch("https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&appid=" + APIKey) //Fetch city coordinates based on city entered
+        .then(function(response){
+        return response.json();
+    })
+    .then(function(data){
+        var cityLat = data[0].lat;  //city lattitude
+        var cityLong = data[0].lon;     //city longitute
+      
+        getCityCurrent(cityLat, cityLong); //call getCityCurrent function to get current forecast
+        getCityFiveDay(cityLat, cityLong); //call getCityFiveDay function to get 5 day forecast
+    
+    })
+
+}
+
+
+
+searchHistoryEl.addEventListener('click', function(event){
+    event.preventDefault();
+    // console.log("a button was clicked");
+    // console.log(event.target.id);
+    searchHistorycityBtn(event.target.id);
+})
 
 function createCityHistory(city){
-
-    // console.log(city);
-
+   
     var cityHistoryList = document.createElement("BUTTON");
     cityHistoryList.classList.add("btn");
     cityHistoryList.classList.add("btn-secondary");
+    cityHistoryList.setAttribute('id', city);
     cityHistoryList.textContent = city;
+
+    var searchHistoryButtons = document.getElementsByClassName("btn-secondary");
+    // console.log(searchHistoryButtons);
     
     // var cityHistoryList = document.createElement("li");
    
     searchHistoryEl.appendChild(cityHistoryList);
-
     // console.log(cityHistoryList);
 
-//     localStorage.setItem("city-finder", JSON.stringify(city));
-
+    localStorage.setItem("city-finder", JSON.stringify(city));
 }
-
-// searchHistoryButtons.addEventListener('click', function(event){
-//     event.preventDefault();
-//     console.log("a button was clicked");
-// })
-
 
 function getCityCurrent(lat, long) { //Fetch current weather data
     fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=" + APIKey + "&units=imperial")
@@ -82,6 +101,7 @@ function getCityCurrent(lat, long) { //Fetch current weather data
 
         document.getElementById('weather-current').innerHTML = temp + "<br><br>" + wind + "<br><br>"+ humidity;
     })
+    return;
 }
 
 function getCityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noon timestamp
@@ -114,6 +134,7 @@ function getCityFiveDay (lat, long) { //Fetch 5 day forecast weather data at noo
             } 
         }
     })
+    return;
 }
 
 function renderLastEvent(){
@@ -131,3 +152,4 @@ function initial(){  //function initial() populates the time-blocks with the las
 }
 
 initial(); //calls function initial() upon browser page load and/or browser refresh
+
