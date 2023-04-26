@@ -8,6 +8,8 @@ var cityButtonEl = document.getElementById("search-btn");
 var currentNameDayIconEl = document.getElementById('city-current');
 var searchHistoryEl = document.getElementById('search-history');
 
+var cityArray = [];
+
 var day1card =document.getElementById('card-1');
 var day2card =document.getElementById('card-2');
 var day3card =document.getElementById('card-3');
@@ -39,6 +41,7 @@ cityButtonEl.addEventListener('click', function(event){
 searchHistoryEl.addEventListener('click', function(event){
     event.preventDefault();
     getCityHistory(event.target.id);
+    return;
 })
 
 //function getCityCurrent() fetches current weather data
@@ -107,8 +110,10 @@ function createCityHistoryBtns(city){
     cityHistoryList.textContent = city;
    
     searchHistoryEl.appendChild(cityHistoryList);
+    cityArray.push(city);
 
     localStorage.setItem("city-finder", JSON.stringify(city));
+    localStorage.setItem("city-storage", JSON.stringify(cityArray));
 }
 
 //function getCityHistory() fetches city coordinates based on the city button clicked in the search history
@@ -127,11 +132,34 @@ function getCityHistory(data){
     })
 }
 
+
+// function renderLastCity(){
+//     var lastCity = JSON.parse(localStorage.getItem("city-finder"));
+//     if(lastCity !== null){
+//       cityInputBoxEl.value = lastCity;
+//     } else {
+//       return;
+//     }
+// }
+
 // function renderLastCity() gets the last city name from local storage and writes it to the search input box
+// the function also gets the array data from local storage and creates clickable buttons for the searh history
 function renderLastCity(){
     var lastCity = JSON.parse(localStorage.getItem("city-finder"));
+    var lastArray = JSON.parse(localStorage.getItem("city-storage"));
     if(lastCity !== null){
+
       cityInputBoxEl.value = lastCity;
+      
+      for(var i=0; i<lastArray.length; i++){
+        var lastcityHistoryList = document.createElement("BUTTON");
+    
+        lastcityHistoryList.classList.add("btn", "btn-secondary");
+        lastcityHistoryList.setAttribute('id', lastArray[i]);
+        lastcityHistoryList.textContent = lastArray[i];
+     
+        searchHistoryEl.appendChild(lastcityHistoryList);
+      }
     } else {
       return;
     }
