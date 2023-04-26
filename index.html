@@ -13,7 +13,7 @@
     <div class="container">
         <h1>Weather Dashboard</h1>
         <div class="row">
-            <div class ="col-md-2 search-container"> <!-- form from bootstrap -->
+            <div class ="col-md-2 search-container"> <!-- form from bootstrap to collect user entered city names -->
                 <form> 
                     <div class="mb-3">
                       <label for="city-finder" class="form-label">Search for a City:</label>
@@ -22,6 +22,7 @@
                     <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
                 </form>
             </div>
+            <!-- the current weather forecast will be displayed in the following <div> -->
             <div class="col-md-10 current-container">
                 <h2 id="city-current"></h2>
                 <img id="icon">
@@ -34,10 +35,12 @@
         <div class="row">
             <div class="col-md-2 search-results">
                 <p></p>
-                <div id="search-history">
+                <div id="search-history">  
+                     <!--dynamically created search history buttons will be created as children of this <div>  -->
                 </div>
             </div>
             
+                    <!-- 5 cards will display the forecast for the next 5 days -->
             <div class="col-md-2" id="card-1">
                 <h3></h3> 
                 <img id="icon1">

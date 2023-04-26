@@ -1,5 +1,7 @@
+// API Key to send to the Weather and Geocoding APIs
 var APIKey = "b640be0d343daf02b19e601754b23be5";
 
+// current day and time info from Day.js
 var today = dayjs();
 var currentDayFormat = today.format('M/D/YYYY');
 
@@ -131,16 +133,6 @@ function getCityHistory(data){
         getCityFiveDay(cityLat, cityLong); //call getCityFiveDay function to get 5 day forecast
     })
 }
-
-
-// function renderLastCity(){
-//     var lastCity = JSON.parse(localStorage.getItem("city-finder"));
-//     if(lastCity !== null){
-//       cityInputBoxEl.value = lastCity;
-//     } else {
-//       return;
-//     }
-// }
 
 // function renderLastCity() gets the last city name from local storage and writes it to the search input box
 // the function also gets the array data from local storage and creates clickable buttons for the searh history
